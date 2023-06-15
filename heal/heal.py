@@ -130,7 +130,8 @@ class heal(Worker):
             intents = discord.Intents.all(),
             activity = discord.Activity(
                 type = discord.ActivityType.streaming,
-                name = 'heal.rip/discord'
+                name = 'heal.rip',
+                url = 'https://twitch.tv/jinxisaskid'
             ),
             allowed_mentions=discord.AllowedMentions(
                 everyone=False,
