@@ -7,6 +7,8 @@ A public repository for the heal clone.
 
 ## Features & More
 - It will encompass all modules offered by heal, ensuring consistency without the errors typically encountered with heal. Including the skidded shit he developed inside it.
+> ![image](https://media.discordapp.net/attachments/1116975007713726504/1118859721445744671/image.png)
+- This isn't the complete version.. i'm currently making everything.
 
 ## Why?
 - Jinx is a dumb skid.
