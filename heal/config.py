@@ -20,3 +20,9 @@ class Color:
 class Emoji:
     approve = '<:approve:1118825630692282439>'
     locked = '<:locked:1118825629362688092>'
+    deny = '<:deny:1118828244276367433>'
+    warn = '<:warn:1118828239301906512>'
+    information = '<:information:1118828235812257813>'
+    negative = '<:negative:1118828232746221632>'
+    add = '<:add:1118828243030642739>'
+    unlocked = '<:unlocked:1118828231060099154>'
