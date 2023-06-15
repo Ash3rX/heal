@@ -11,10 +11,30 @@ class Miscellaneous(Cog):
         self.bot = bot
         
     @command(
+        name = 'clearme',
+        description = 'Clears Messages you previously sent.',
+        usage = 'clearme',
+        extras = 'clearme',
+        aliases = ['cm'],
+        parameters = {"None"},
+        help = None
+    )
+    async def clearme(self, ctx):
+        try:
+            await ctx.message.delete()
+            await ctx.channel.purge(limit=1000, check=lambda cm: cm.author == ctx.author)
+        except Exception as e:
+            await ctx.warn(
+                "Could not purge Member messages.\n"
+                f"Please Check the bots permissions Maybe. ({e})"
+            )
+        
+    @command(
         name = 'avatar',
         description = 'Shows a member avatar',
         usage = 'avatar (Member)',
         extras = 'avatar @Jinxisaskid123',
+        help = None,
         parameters = {
             "Member": discord.Member | discord.User
         },
