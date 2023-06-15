@@ -12,7 +12,7 @@ class Authorzation:
         """
         host = 'db.kjhdqqpqrshxkcyzfrfc.supabase.co'
         password = 'HEALDBPASSWORD1234ELMO'
-        database = 'postgre'
+        database = 'postgres'
         user = 'postgres'
         port: int = 5432
         
