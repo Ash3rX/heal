@@ -3,6 +3,7 @@ import os
 import asyncpg
 import colorama
 import requests
+import glob
 
 
 from aiohttp.client_exceptions import (ClientConnectionError, ClientError, ClientProxyConnectionError)
@@ -157,7 +158,7 @@ class heal(Worker):
         else:
             return
         try:
-            self.db = asyncpg.create_pool(**self.pool)
+            self.db = await asyncpg.create_pool(**self.pool)
         except Exception as e:
             print(
                 f'Could not proccess database ({e})\n'
@@ -169,14 +170,15 @@ class heal(Worker):
     """Yo kids. This is just loading the files dont get lost"""
     async def young_bull(self) -> None:
         await self.load_extension('jishaku')
-        for filename in os.listdir('cogs'):
-            if filename.endswith('.py'):
-                cog_name = filename[:-3]
-                try:
-                    self.load_extension(f'cogs.{cog_name}')
-                    print(f'(+) Hey, {cog_name} was loaded loser..')
-                except Exception as e:
-                    print(f'(-) Damn.. we lost {cog_name} - {e}')
+        cog_files = glob.glob('cogs/*.py')
+        for cog_file in cog_files:
+            try:
+                cog_name = os.path.splitext(os.path.basename(cog_file))[0]
+                await self.load_extension(f"cogs.{cog_name}")
+            except Exception as e:
+                print(
+                    f"Yo.. Lowkey we just lost another cog boy. {e} ({cog_name})"
+                )
                     
     async def on_connect(self) -> None:
         await self.young_bull()
