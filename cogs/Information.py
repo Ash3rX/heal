@@ -14,7 +14,7 @@ class Information(Cog):
         Command = self.bot.get_command(command)
         if not Command:
             return await ctx.warn(
-                f"{ctx.author.mention}: Command **{command}** not found."
+                f"{ctx.author.mention}: Command `{command}` doesn't exist"
             )
         embed = Embed(color = Color.normal).set_author(name = ctx.author.name, icon_url=ctx.author.display_avatar.url)
         embed.add_field(
