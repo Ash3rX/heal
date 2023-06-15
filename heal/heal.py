@@ -10,6 +10,7 @@ from colorama import (Fore, Style)
 from discord.ext.commands import Command
 from discord import Embed, Guild
 from discord.ext import commands
+from .config import Authorzation, Emoji, Color
 
 
 class GuildProxy:
@@ -98,15 +99,15 @@ class GuildProxy:
         return max(roles, key=lambda role: role.position) if roles else None
     
     
-class HealContext(discord.Context):
+class HealContext(commands.Context):
     """Custom Context for sending Messages"""
     async def approve(self, message: str) -> None:
-        embed = Embed(description=f'', color=0xffffff)
+        embed = Embed(description=f'{Emoji.approve} {message}', color=Color.approve)
         await self.send(embed=embed)
         
     async def warn(self, message: str) -> None:
-        embed = Embed(description=f'', color=0xffffff)
-    
+        embed = Embed(description=f'{Emoji.warn} {message}', color=Color.warn)
+        await self.send(embed=embed)
 
 class Worker(commands.AutoShardedBot):
     def __init__(self, *args, **kwargs):
@@ -114,3 +115,74 @@ class Worker(commands.AutoShardedBot):
 
     async def get_context(self, message, *, cls=HealContext):
         return await super().get_context(message, cls=cls)
+    
+    
+class heal(Worker):
+    def __init__(self) -> None:
+        super().__init__(
+            command_prefix = Authorzation.prefix,
+            strip_after_prefix = True,
+            help_command = None,
+            chunk_guilds_on_startup = False,
+            case_insensitive = True,
+            owner_ids = Authorzation.owner_ids,
+            intents = discord.Intents.all(),
+            activity = discord.Activity(
+                type = discord.ActivityType.streaming,
+                name = 'heal.rip/discord'
+            ),
+            allowed_mentions=discord.AllowedMentions(
+                everyone=False,
+                users=True,
+                roles=False,
+                replied_user=False,
+            )   
+        )
+        self.pool = {
+            'host': Authorzation.database.host,
+            'password': Authorzation.database.password,
+            'database': Authorzation.database.database,
+            'user': Authorzation.database.user,
+            'port': Authorzation.database.port
+        }
+        self.ready = None
+
+    async def on_ready(self) -> None:
+        if not self.ready:
+            self.ready = True
+            self.debugger = True
+            self.logger = True
+            self.reconnect = True
+            self.hook = True
+        else:
+            return
+        try:
+            self.db = asyncpg.create_pool(**self.pool)
+        except Exception as e:
+            print(
+                f'Could not proccess database ({e})\n'
+                'Have you tried Creating a database? (https://supabase.com/)\n'
+                'Most Likely you have invalid creditals.. so please check em.'
+            )
+            pass
+            
+    """Yo kids. This is just loading the files dont get lost"""
+    async def young_bull(self) -> None:
+        await self.load_extension('jishaku')
+        for filename in os.listdir('cogs'):
+            if filename.endswith('.py'):
+                cog_name = filename[:-3]
+                try:
+                    self.load_extension(f'cogs.{cog_name}')
+                    print(f'(+) Hey, {cog_name} was loaded loser..')
+                except Exception as e:
+                    print(f'(-) Damn.. we lost {cog_name} - {e}')
+                    
+    async def on_connect(self) -> None:
+        await self.young_bull()
+        return print(
+            f"(+) Okay Woah We Bootin Up.. "
+            f"Just wait some time and the bot will respond. (Prefix is {self.command_prefix})"
+        )
+        
+    
